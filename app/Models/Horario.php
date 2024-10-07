@@ -9,4 +9,16 @@ class Horario extends Model
 {
     use HasFactory;
     protected $table = "horarios";
+    protected $fillable = [
+        'disciplina',
+        'data',
+        'inicio',
+        'fim',
+        'status',
+    ];
+
+    public static function disciplinas()
+    {
+        return ['Matemática', 'Português', 'História', 'Ciências', 'Geografia', 'Física', 'Biologia', 'Quimica'];
+    }
 }

@@ -9,7 +9,13 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashController;
 
 
-Route::get('/horarios', [HorariosController::class, 'index'])->name('horarios');
+Route::get('/horarios', [HorariosController::class, 'index'])->name('horarios.index');
+Route::get('/horarios/create', [HorariosController::class, 'create'])->name('horarios.create');
+Route::post('/horarios/store', [HorariosController::class, 'store'])->name('horarios.store');
+Route::delete('/horarios/{id}/destroy', [HorariosController::class, 'destroy'])->name('horarios.destroy');
+Route::get('/horarios/{id}/edit', [HorariosController::class, 'edit'])->name('horarios.edit');
+Route::put('/horarios/{id}/update', [HorariosController::class, 'update'])->name('horarios.update');
+
 
 Route::get('/dash', [DashController::class, 'index'])->name('dash');
 

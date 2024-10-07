@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('horarios', function (Blueprint $table) {
             $table->id();
-            $table->string('disciplina'); // Nome da disciplina ou atividade
+            $table->enum('disciplina', ['Matemática', 'Português', 'História', 'Ciências', 'Geografia', 'Física', 'Biologia', 'Quimica']); // Nome da disciplina ou atividade
             $table->date('data'); // Data do horário de estudo
             $table->time('inicio'); // Hora de início do estudo
             $table->time('fim'); // Hora de término do estudo
