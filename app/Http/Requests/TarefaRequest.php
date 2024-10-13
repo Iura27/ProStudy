@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class HorarioRequest extends FormRequest
+class TarefaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,13 @@ class HorarioRequest extends FormRequest
     public function rules(): array
     {
         return [
-        'disciplina' => 'required|min:5',
-        'data' => 'date',
-        'inicio' => 'required|date_format:H:i',
-        'fim' => 'required|date_format:H:i|after:inicio',
+
+        'descricao' => 'required|min:5',
+        'tipo' => 'required',
+        'disciplina' => 'required',
         'status' => 'required',
-
-
+        'data_entrega' => 'date'
+            //
         ];
     }
 }

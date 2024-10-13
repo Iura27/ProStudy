@@ -40,18 +40,21 @@
                                 @endif
                             </td>
                             <td>
-                                <!-- Ícone de Edição -->
-                                <a href="{{ route('horarios.edit', $horario->id) }}" class="text-primary" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <!-- Ícone de Exclusão -->
-                                <form action="{{ route('horarios.destroy', $horario->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-danger" title="Excluir" style="border: none; background: none;">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                               <!-- Botão de Edição -->
+<a href="{{ route('horarios.edit', $horario->id) }}" class="btn btn-warning" title="Editar">
+    Editar
+</a>
+
+<!-- Botão de Exclusão -->
+<form action="{{ route('horarios.destroy', $horario->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir?');">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-danger" title="Excluir">
+        Excluir
+    </button>
+</form>
+
+
                             </td>
                         </tr>
                         @endforeach

@@ -1,81 +1,86 @@
-<div class="topbar transition">
-	<div class="bars">
-		<button type="button" class="btn transition" id="sidebar-toggle">
-			<i class="fa fa-bars"></i>
-		</button>
-	</div>
-		<div class="menu">
-			<ul>
-				<li class="nav-item dropdown dropdown-list-toggle">
-					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-					   <i class="fa fa-bell size-icon-1"></i><span class="badge bg-danger notif">4</span>
-					</a>
-					<div class="dropdown-menu dropdown-list">
-						<div class="dropdown-header">Notifications</div>
-						<div class="dropdown-list-content dropdown-list-icons">
-							<div class="custome-list-notif">
-							<a href="#" class="dropdown-item dropdown-item-unread">
-								<div class="dropdown-item-icon bg-primary text-white">
-								  <i class="fas fa-code"></i>
-								</div>
-								<div class="dropdown-item-desc">
-									The Atrana template has the latest update!
-								  <div class="time text-primary">3 Min Ago</div>
-								</div>
-							  </a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar with Dropdown</title>
+    <style>
+        /* Estilos básicos para a navbar */
+        .navbar {
+            background-color: #33333300;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
+        .navbar img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 10px;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            width: 150px;
+            z-index: 1000;
+        }
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+        .show {
+            display: block;
+        }
+        .profile{
+            background-color: #ffffff00;
+            box-shadow: none
+        }
+    </style>
+</head>
+<body>
 
-							  <a href="#" class="dropdown-item">
-								<div class="dropdown-item-icon bg-info text-white">
-								  <i class="far fa-user"></i>
-								</div>
-								<div class="dropdown-item-desc">
-								   Sri asks you for friendship!
-								  <div class="time">12 Hours Ago</div>
-								</div>
-							  </a>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="menu">
+            <!-- Outros itens da navbar -->
+        </div>
+        <div class="profile">
+            <img src="{{ asset('assets/images/avatar/avatar-1.png')}}" alt="Avatar" id="profileImage">
 
-							  <a href="#" class="dropdown-item">
-								<div class="dropdown-item-icon bg-danger text-white">
-								  <i class="fas fa-check"></i>
-								</div>
-								<div class="dropdown-item-desc">
-									Storage has been cleared, now you can get back to work!
-								  <div class="time">20 Hours Ago</div>
-								</div>
-							  </a>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="/perfil">Meu Perfil</a>
+                <a href="settings.html">Settings</a>
+                <hr>
+                <a href="#">Logout</a>
+            </div>
+        </div>
+    </div>
 
+    <!-- JavaScript para o comportamento do dropdown -->
+    <script>
+        const profileImage = document.getElementById('profileImage');
+        const dropdownMenu = document.getElementById('dropdownMenu');
 
-							  <a href="#" class="dropdown-item">
-								<div class="dropdown-item-icon bg-info text-white">
-								  <i class="fas fa-bell"></i>
-								</div>
-								<div class="dropdown-item-desc">
-								    Welcome to Atrana Template, I hope you enjoy using this template!
-								  <div class="time">Yesterday</div>
-								</div>
-							  </a>
+        profileImage.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('show');
+        });
 
-							</div>
-						</div>
-
-						<div class="dropdown-footer text-center">
-						  <a href="#">View All</a>
-						</div>
-
-
-				  </li>
-
-				  <li class="nav-item dropdown">
-					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-					  <img src="{{ asset('assets/images/avatar/avatar-1.png')}}" alt="">
-					</a>
-					<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="my-profile.html"><i class="fa fa-user size-icon-1"></i> <span>My Profile</span></a>
-						<a class="dropdown-item" href="settings.html"><i class="fa fa-cog size-icon-1"></i> <span>Settings</span></a>
-						<hr class="dropdown-divider">
-						<a class="dropdown-item" href="#"><i class="fa fa-sign-out-alt  size-icon-1"></i> <span>My Profile</span></a>
-					</ul>
-				  </li>
-			</ul>
-		</div>
-	</div>
+        // Fechar o dropdown ao clicar fora
+        window.addEventListener('click', (e) => {
+            if (!profileImage.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

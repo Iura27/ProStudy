@@ -19,6 +19,8 @@ return new class extends Migration
             $table->time('fim'); // Hora de término do estudo
             $table->string('status')->default('ativo');
             $table->timestamps();
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -28,5 +30,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('horarios');
+        $table->dropForeign(['user_id']);
+        $table->dropColumn('user_id');
     }
 };

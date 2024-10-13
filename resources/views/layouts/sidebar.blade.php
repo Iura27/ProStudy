@@ -1,3 +1,7 @@
+
+
+<!-- Sidebar -->
+@if (empty($hideSidebar))
 <div class="sidebar transition overlay-scrollbars animate__animated  animate__slideInLeft">
     <div class="sidebar-content">
         <div id="sidebar">
@@ -15,41 +19,23 @@
             </li>
 
             <!-- Divider-->
-            <li class="divider" data-text="STARTER">STARTER</li>
+            <li class="divider" data-text="STARTER">Home</li>
 
-            <li>
-                <router-link to="/">Home</router-link>
-            </li>
+
 
             <li>
                 <a href="/horarios">
-                    <i class='bx bxs-meh-blank icon'></i>
+                    <i class='bx bx-time icon'></i>
                     Horários
                 </a>
             </li>
 
 
             <li>
-                <a href="#">
-                    <i class='fa fa-th icon' ></i>
-                    Bootstrap
-                    <i class='bx bx-chevron-right icon-right' ></i>
+                <a href="/tarefas">
+                    <i class='bx bx-task icon'></i>
+                    Tarefas
                 </a>
-                <ul class="side-dropdown">
-                    <li><a href="bootstrap-alert.html">Alert</a></li>
-                    <li><a href="bootstrap-badge.html">Badge</a></li>
-                    <li><a href="bootstrap-breadcrumb.html">Breadcrumb</a></li>
-                    <li><a href="bootstrap-buttons.html">Buttons</a></li>
-                    <li><a href="bootstrap-card.html">Card</a></li>
-                    <li><a href="bootstrap-carousel.html">Carousel</a></li>
-                    <li><a href="bootstrap-dropdown.html">Dropdown</a></li>
-                    <li><a href="bootstrap-list-group.html">List Group</a></li>
-                    <li><a href="bootstrap-modal.html">Modal</a></li>
-                    <li><a href="bootstrap-nav.html">Navs</a></li>
-                    <li><a href="bootstrap-pagination.html">Pagination</a></li>
-                    <li><a href="bootstrap-progress.html">Progress</a></li>
-                    <li><a href="bootstrap-spinner.html">Spinner</a></li>
-                </ul>
             </li>
 
             <!-- Divider-->
@@ -172,3 +158,4 @@
    </div>
  </div>
 </div><!-- End Sidebar-->
+@endif

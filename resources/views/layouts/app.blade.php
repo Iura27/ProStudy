@@ -9,6 +9,8 @@
 
 	<title>Dashboard - Atrana</title>
 
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.min.css">
 	<!-- Bootstrap CSS-->
 	<link rel="stylesheet" href="{{ asset('assets/modules/bootstrap-5.1.3/css/bootstrap.css')}}">
 	<!-- Style CSS -->
@@ -31,6 +33,8 @@
 	@include('layouts.sidebar')
 
 	<div class="sidebar-overlay"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.all.min.js"></script>
 
 
 	<!--Content Start-->
