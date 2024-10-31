@@ -1,79 +1,74 @@
-@extends('layouts.app')
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Login - ProStudy</title>
 
-@section('content')
-    @php $hideSidebar = true; @endphp
-    @php $hideNavbar = true; @endphp
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="assets/modules/bootstrap-5.1.3/css/bootstrap.css">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Bootstrap Icon-->
+    <link rel="stylesheet" href="assets/modules/bootstrap-icons/bootstrap-icons.css">
+</head>
+<body>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card" id="card" ;>
-                    <div class="card-header text-center">{{ __('Login') }}</div>
+  <div id="auth">
+    <div class="row h-100">
+      <div class="col-lg-7 d-none d-lg-block">
+        <div id="auth-left"></div>
+      </div>
+      <div class="col-lg-5 col-12">
+        <div id="auth-right">
+          <div class="auth-logo">
+            <a href="index.html"><img src="assets/images/logo.png" alt="Logo"> ProStudy</a>
+          </div>
+          <h1 class="auth-title">Login.</h1>
+          <p class="auth-subtitle mb-5">Insira seus dados para realizar login.</p>
 
-
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('login') }}">
-                            @csrf
-
-                            <div class="row mb-3"  >
-                                <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Senha') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-6 offset-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                        <label class="form-check-label" for="remember">
-                                            {{ __('Me lembre') }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-0" >
-                                <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Login') }}
-                                    </button>
-
-                                    @if (Route::has('password.request'))
-            <div style="margin-top: 10px;"> <!-- Adicione uma margem superior para espaçamento -->
-                <a style="color: #007bff; text-decoration: underline;" href="{{ route('password.request') }}">
-                    {{ __('Esqueceu sua senha?') }}
-                </a>
+          <!-- Formulário de Login Atualizado -->
+          <form action="{{ route('login') }}" method="POST">
+            @csrf <!-- Token de segurança para o Laravel -->
+            <div class="form-group position-relative has-icon-left mb-4">
+              <input type="text" class="form-control form-control-xl" name="email" placeholder="Email" required autofocus>
+              <div class="form-control-icon">
+                <i class="bi bi-person"></i>
+              </div>
             </div>
-        @endif
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            <div class="form-group position-relative has-icon-left mb-4">
+              <input type="password" class="form-control form-control-xl" name="password" placeholder="Senha" required>
+              <div class="form-control-icon">
+                <i class="bi bi-shield-lock"></i>
+              </div>
             </div>
+            <div class="form-check form-check-lg d-flex align-items-end">
+              <input class="form-check-input me-2" type="checkbox" name="remember" id="flexCheckDefault">
+              <label class="form-check-label text-gray-600" for="flexCheckDefault">
+                Me lembre
+              </label>
+            </div>
+            <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5" type="submit">Login</button>
+          </form>
+
+          <div class="text-center mt-5 text-lg fs-4">
+            <p class="text-gray-600">Não tem uma conta? <a href="{{ route('register') }}" class="font-bold">Cadastre-se</a>.</p>
+            <p><a class="font-bold" href="{{ route('password.request') }}">Esqueceu sua senha?</a>.</p>
+          </div>
         </div>
+      </div>
     </div>
-@endsection
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="assets/js/atrana.js"></script>
+  <!-- JS Libraries -->
+  <script src="assets/modules/jquery/jquery.min.js"></script>
+  <script src="assets/modules/bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/modules/popper/popper.min.js"></script>
+  <!-- Template JS File -->
+  <script src="assets/js/script.js"></script>
+  <script src="assets/js/custom.js"></script>
+</body>
+</html>

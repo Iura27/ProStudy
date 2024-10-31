@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class HorarioRequest extends FormRequest
+class LembreteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +22,10 @@ class HorarioRequest extends FormRequest
     public function rules(): array
     {
         return [
-        'disciplina' => 'required|min:5',
-        'data' => 'date',
-        'inicio' => 'required|date_format:H:i',
-        'fim' => 'required|date_format:H:i|after:inicio',
-        'status' => 'required',
-        'observacao'
-
-
+            'texto' => 'required|string|max:255', // Texto do lembrete é obrigatório, tipo string, com no máximo 255 caracteres.
+            'data' => 'required|date', // Data é obrigatória e deve estar em formato de data válido.
+            'lida' => 'boolean', // Lido é obrigatório e deve ser booleano (0 ou 1).
+            // O
         ];
     }
 }

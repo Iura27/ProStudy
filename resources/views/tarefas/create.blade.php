@@ -9,6 +9,10 @@
     </ul>
 @endif
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
 
     <div>
         <form class="form-create" action="{{ route('tarefas.store') }}" method="POST" >
@@ -44,20 +48,23 @@
         </select>
     </div>
 
-
-    <!-- Campo Data -->
-    <div>
-        <label class="label-form">Data de Entrega:</label><br>
+    <div class="form-group">
+        <label for="data_entrega">Prazo final:</label>
         <input type="date" class="form-input" id="data_entrega" name="data_entrega" v-model="form.data" required />
     </div>
+
+
 
 
     <!-- Campo Status -->
     <div>
         <label class="label-form">Status:</label><br>
         <select class="form-input" id="status" name="status" required>
-            <option value="pendente" >Pendente</option>
-            <option value="feito">Feito</option>
+            @foreach($statusOptions as $status)
+                <option value="{{ $status }}" {{ (isset($horario) && $horario->status === $status) ? 'selected' : '' }}>
+                    {{ $status }}
+                </option>
+            @endforeach
         </select>
     </div>
 
@@ -70,5 +77,15 @@
     </div>
 </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr("#data_entrega", {
+                enableTime: true,            // Ativa a seleção de hora
+                dateFormat: "Y-m-d H:i",     // Formato de data e hora
+                time_24hr: true              // Usa o formato de 24 horas
+            });
+        });
+    </script>
 
     @endsection

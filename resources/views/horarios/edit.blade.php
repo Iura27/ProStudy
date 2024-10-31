@@ -50,11 +50,15 @@
         <!-- Campo Status -->
         <div>
             <label class="label-form">Status:</label><br>
-            <select class="form-input" id="status" name="status" required>
-                <option value="pendente" {{ $horario->status == 'pendente' ? 'selected' : '' }}>Pendente</option>
-                <option value="concluido" {{ $horario->status == 'concluido' ? 'selected' : '' }}>Concluído</option>
+            <select class="form-input" id="status" name="status" v-model="form.status" required>
+                @foreach($statusOptions as $stat)
+                    <option value="{{ $stat }}" {{ $horario->statusOptions === $stat ? 'selected' : '' }}>
+                        {{ $stat }}
+                    </option>
+                @endforeach
             </select>
         </div>
+
 
         <!-- Botões -->
         <div class="botoes">

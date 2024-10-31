@@ -9,6 +9,9 @@
     </ul>
 @endif
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <div>
     <form class="form-create" action="{{ route('tarefas.update', $tarefa->id) }}" method="POST">
         @csrf
@@ -48,20 +51,23 @@
             </select>
         </div>
 
-        <!-- Campo Data de Entrega -->
-        <div>
-            <label class="label-form">Data de Entrega:</label><br>
-            <input type="date" class="form-input" id="data_entrega" name="data_entrega" value="{{ $tarefa->data_entrega }}" required />
+        <div class="form-input">
+            <label for="dataHora">Data de Entrega:</label>
+            <input type="text" id="data_entrega" name="data_entrega" class="form-control" value={{($tarefa->data_entrega) }} required>
         </div>
 
         <!-- Campo Status -->
         <div>
             <label class="label-form">Status:</label><br>
-            <select class="form-input" id="status" name="status" required>
-                <option value="pendente" {{ $tarefa->status == 'pendente' ? 'selected' : '' }}>Pendente</option>
-                <option value="feito" {{ $tarefa->status == 'feito' ? 'selected' : '' }}>Feito</option>
+            <select class="form-input" id="status" name="status" v-model="form.status" required>
+                @foreach($statusOptions as $status)
+                    <option value="{{ $status }}" {{ $tarefa->status === $status ? 'selected' : '' }}>
+                        {{ $status }}
+                    </option>
+                @endforeach
             </select>
         </div>
+
 
         <!-- Botões -->
         <div class="botoes">
@@ -70,5 +76,14 @@
         </div>
     </form>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        flatpickr("#data_entrega", {
+            enableTime: true,            // Ativa a seleção de hora
+            dateFormat: "Y-m-d H:i",     // Formato de data e hora
+            time_24hr: true              // Usa o formato de 24 horas
+        });
+    });
+</script>
 
 @endsection

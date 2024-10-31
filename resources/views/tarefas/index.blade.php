@@ -22,7 +22,7 @@
                                 <th scope="col">Descrição</th>
                                 <th scope="col">Tipo</th>
                                 <th scope="col">Disciplina</th>
-                                <th scope="col">Data de Entrega</th>
+                                <th scope="col">Prazo final</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Ações</th>
                         </tr>
@@ -34,13 +34,31 @@
                             <td>{{ $tarefa->descricao }}</td>
                             <td>{{ $tarefa->tipo }}</td>
                             <td>{{ $tarefa->disciplina }}</td>
-                            <td>{{ $tarefa->data_entrega }}</td>
                             <td>
-                                @if($tarefa->status == 'concluido')
-                                    <span class="text-success">{{ ucfirst($tarefa->status) }}</span>
-                                @else
-                                    <span class="text-warning">{{ ucfirst($tarefa->status) }}</span>
-                                @endif
+                                <span class="
+                                    @if($tarefa->status === 'Atrasada') bg-danger text-white
+                                    @elseif($tarefa->status === 'Em andamento') bg-warning text-dark
+                                    @elseif($tarefa->status === 'Concluídas') bg-success text-white
+                                    @else bg-secondary text-white
+                                    @endif
+                                    rounded px-2 py-1"
+                                    style="font-size: 0.875rem; line-height: 1.2; display: inline-block;">
+                                    {{ \Carbon\Carbon::parse($tarefa->data_entrega)->format('d/m/y - H:i') }}
+                                </span>
+                            </td>
+
+
+                            <td>
+                                <form action="{{ route('tarefas.updateStatus', $tarefa->id) }}" method="POST">
+                                    @csrf
+                                    <select name="status" onchange="this.form.submit()" class="form-select">
+                                        @foreach($statusOptions as $stat)
+                                            <option value="{{ $stat }}" {{ $tarefa->status === $stat ? 'selected' : '' }}>
+                                                {{ $stat }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </form>
                             </td>
                             <td>
                                <!-- Botão de Edição -->

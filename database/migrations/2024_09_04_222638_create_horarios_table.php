@@ -17,10 +17,11 @@ return new class extends Migration
             $table->date('data'); // Data do horário de estudo
             $table->time('inicio'); // Hora de início do estudo
             $table->time('fim'); // Hora de término do estudo
-            $table->string('status')->default('ativo');
-            $table->timestamps();
+            $table->enum('status', ['Em andamento', 'Concluídas', 'Adiadas', 'Atrasada', 'Quase atrasada'])->default('Em andamento');
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->text('observacao')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -30,7 +31,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('horarios');
-        $table->dropForeign(['user_id']);
-        $table->dropColumn('user_id');
     }
 };

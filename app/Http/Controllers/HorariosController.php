@@ -20,14 +20,17 @@ class HorariosController extends Controller
 
 
     public function index() {
-        $horarios = Horario::All();
-        return view('horarios.index', ['horarios'=>$horarios]);
+        $user = auth()->user();
+        $horarios = Horario::where('user_id', $user->id)->get();
+        $statusOptions = Horario::getStatusOptions();
+        return view('horarios.index', ['horarios'=>$horarios, 'statusOptions' => $statusOptions]);
     }
 
     public function create() {
         $disciplinas = Horario::disciplinas();
         $user = auth()->user();
-        return view('horarios.create',  compact('disciplinas')); // Crie uma view chamada 'create' para o formulário
+        $statusOptions = Horario::getStatusOptions();
+        return view('horarios.create',  compact('disciplinas', 'statusOptions')); // Crie uma view chamada 'create' para o formulário
     }
 
     public function store(HorarioRequest $request) {
@@ -37,6 +40,7 @@ class HorariosController extends Controller
             'inicio' => $request->inicio,
             'fim' => $request->fim,
             'status' => $request->status, // Utilize o status enviado no formulário
+            'observacao' => $request->observacao,
             'user_id' => Auth::id(), // Associa o horário ao usuário autenticado
         ]);
         return redirect('horarios');
@@ -50,9 +54,10 @@ class HorariosController extends Controller
 
     public function edit($id) {
        $disciplinas = Horario::disciplinas();
+       $statusOptions = Horario::getStatusOptions();
        $horario =  Horario::find($id);
 
-        return view('horarios.edit', compact('horario'), compact('disciplinas')); // Crie uma view chamada 'create' para o formulário
+       return view('horarios.edit', compact('horario', 'disciplinas', 'statusOptions'));
     }
 
     public function update(Request $request, $id) {
@@ -61,5 +66,22 @@ class HorariosController extends Controller
 
          return redirect('horarios');
      }
+
+
+
+
+public function updateStatus(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required|in:Em andamento,Concluídas,Adiadas,Atrasada,Quase atrasada',
+    ]);
+
+    $horario = Horario::findOrFail($id);
+    $horario->status = $request->status;
+    $horario->save();
+
+    return redirect()->back()->with('success', 'Status atualizado com sucesso!');
+}
+
 
 }

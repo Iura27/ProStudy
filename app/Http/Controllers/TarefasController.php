@@ -14,16 +14,18 @@ use Illuminate\Support\Facades\Auth;
 class TarefasController extends Controller
 {
     public function index() {
-        $tarefas = Tarefa::all();
         $user = auth()->user(); // Obtém o usuário autenticado
-        return view('tarefas.index', ['tarefas' => $tarefas, 'user' => $user]); // Passa o usuário para a view
+        $tarefas = Tarefa::where('user_id', $user->id)->get();
+        $statusOptions = Tarefa::getStatusOptions();
+        return view('tarefas.index', ['tarefas' => $tarefas, 'user' => $user, 'statusOptions' => $statusOptions]); // Passa o usuário para a view
     }
 
     public function create() {
         $disciplinas = Tarefa::disciplinas();
         $tipos = Tarefa::tipos(); // Corrigido de Terefa para Tarefa
         $user = auth()->user();
-        return view('tarefas.create', compact('disciplinas', 'tipos'));
+        $statusOptions = Tarefa::getStatusOptions();
+        return view('tarefas.create', compact('disciplinas', 'tipos', 'statusOptions'));
     }
 
     public function store(TarefaRequest $request) {
@@ -48,8 +50,9 @@ class TarefasController extends Controller
         $tarefa = Tarefa::findOrFail($id); // Encontre a tarefa pelo ID
         $tipos = Tarefa::tipos(); // Obtenha os tipos de tarefa
         $disciplinas = Tarefa::disciplinas(); // Obtenha as disciplinas
+        $statusOptions = Tarefa::getStatusOptions();
 
-        return view('tarefas.edit', compact('tarefa', 'disciplinas', 'tipos')); // Passe as variáveis para a view
+        return view('tarefas.edit', compact('tarefa', 'disciplinas', 'tipos', 'statusOptions')); // Passe as variáveis para a view
     }
 
 
@@ -64,5 +67,19 @@ class TarefasController extends Controller
         return redirect()->route('tarefas.index')->with('success', 'Tarefa atualizada com sucesso!');
 
     }
+
+    public function updateStatus(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required|in:Em andamento,Concluídas,Adiadas,Atrasada,Quase atrasada',
+    ]);
+
+    $tarefa = Tarefa::findOrFail($id);
+    $tarefa->status = $request->status;
+    $tarefa->save();
+
+    return redirect()->back()->with('success', 'Status atualizado com sucesso!');
+}
+
 
 }
