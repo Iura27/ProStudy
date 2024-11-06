@@ -36,4 +36,10 @@ class Tarefa extends Model
         return ['Em andamento', 'Concluídas', 'Adiadas', 'Atrasada', 'Quase atrasada'];
     }
 
+    public function imagens()
+    {
+        return $this->hasMany(Imagem::class);
+    }
+
+
 }

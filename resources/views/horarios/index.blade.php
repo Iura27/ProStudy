@@ -36,7 +36,7 @@
                     </thead>
                     <tbody>
                         @foreach($horarios as $horario)
-                        <tr>
+                        <tr @if($horario->status === 'Concluídas') style="text-decoration: line-through; color: gray; opacity: 0.5;" @endif>
                             <td>{{ $horario->id }}</td>
                             <td>{{ $horario->disciplina }}</td>
                             <td>{{ \Carbon\Carbon::parse($horario->data)->format('d/m/Y') }}</td>

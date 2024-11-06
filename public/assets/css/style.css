@@ -2393,6 +2393,40 @@ footer .author-footer{
 
 }
 
+.input-group .input-group-append label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+#previewImagem img {
+    margin-top: 5px;
+    border-radius: 4px;
+}
+
+.existing-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.existing-image {
+    position: relative;
+}
+
+.existing-image img {
+    max-width: 100px;
+    margin-top: 10px;
+}
+
+.existing-image form {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px;
+}
+
+
+
 @media (max-width: 999px) {
     #card {
         transform: translateX(0px); /* Remove a transformação quando a largura da tela for menor que 1000px */
@@ -3016,8 +3050,13 @@ footer .author-footer{
     width: 100%;
 	border-radius: 10px;
     font: #000;
+    margin-top: 10px;
 
   }
+
+  .label-form {
+    margin-top: 15px; /* Adiciona um espaço acima dos rótulos */
+}
 
   .form-multi-input{
     width: 100%;
@@ -3039,6 +3078,30 @@ footer .author-footer{
     padding-right: 36px;
     position: relative;
 }
+
+
+
+.image-preview-container {
+    display: flex; /* Alinha as imagens em linha */
+    gap: 15px; /* Espaço entre as imagens */
+    flex-wrap: wrap; /* Faz com que quebrem linha caso ultrapassem o limite */
+}
+
+.image-preview {
+    text-align: center; /* Centraliza o checkbox embaixo da imagem */
+}
+
+.image-preview img {
+    max-width: 100px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 5px; /* Espaço entre a imagem e o checkbox */
+}
+
+.checkbox-container {
+    display: block; /* Alinha o checkbox centralizado abaixo de cada imagem */
+}
+
 
 .icon-large {
     font-size: 24px; /* Ou o tamanho que você preferir */

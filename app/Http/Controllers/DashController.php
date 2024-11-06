@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use app\Http\Controllers\TarefasController;
 use App\Models\Tarefa;
-use app\Http\Controllers\HorarioController;
 use App\Models\Horario;
-use app\Http\Controllers\PlanoDeEstudoController;
 use App\Models\PlanoDeEstudo;
 
 class DashController extends Controller
@@ -16,17 +13,42 @@ class DashController extends Controller
         return view('dash');
     }
 
-    public function dashboard() {
-        $tarefasStatus = Tarefa::select('status', \DB::raw('count(*) as total'))
-                                ->groupBy('status')
-                                ->pluck('total', 'status');
+    public function dashboard(Request $request)
+{
+    // Dados gerais
+    $totalTarefas = Tarefa::count();
+    $totalHorarios = Horario::count();
+    $totalPlanos = PlanoDeEstudo::count();
 
-        $totalTarefas = Tarefa::count();
-        $totalHorarios = Horario::count();
-        $totalPlanos = PlanoDeEstudo::count();
+    // Dados para o gráfico de Status das Tarefas
+    $tarefasStatus = Tarefa::select('status', \DB::raw('count(*) as total'))
+                            ->groupBy('status')
+                            ->pluck('total', 'status');
 
-        return view('dash', compact('tarefasStatus', 'totalTarefas', 'totalHorarios', 'totalPlanos'));
-    }
+    // Obter lista de disciplinas para o filtro
+    $disciplinas = Tarefa::distinct()->pluck('disciplina');
 
+    // Filtro de disciplina e status selecionados pelo usuário
+    $filtroDisciplina = $request->input('disciplina');
+    $filtroStatus = $request->input('status');
 
+    // Consulta para filtrar tarefas
+    $tarefasFiltradas = Tarefa::when($filtroDisciplina, function ($query) use ($filtroDisciplina) {
+                                return $query->where('disciplina', $filtroDisciplina);
+                            })
+                            ->when($filtroStatus, function ($query) use ($filtroStatus) {
+                                return $query->where('status', $filtroStatus);
+                            })
+                            ->get();
+
+    // Dados para o gráfico de Tarefas por Disciplina
+    $tarefasPorDisciplina = Tarefa::select('disciplina', \DB::raw('count(*) as total'))
+                                    ->groupBy('disciplina')
+                                    ->pluck('total', 'disciplina');
+
+    return view('dash', compact(
+        'tarefasStatus', 'tarefasPorDisciplina', 'totalTarefas',
+        'totalHorarios', 'totalPlanos', 'disciplinas', 'tarefasFiltradas'
+    ));
+}
 }

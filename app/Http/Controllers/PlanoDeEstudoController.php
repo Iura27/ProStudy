@@ -15,6 +15,7 @@ class PlanoDeEstudoController extends Controller
         $planos = PlanoDeEstudo::with('horarios', 'tarefas')  // Corrigido para 'horarios' e 'tarefas'
             ->where('user_id', auth()->id())
             ->get();
+        $planos = PlanoDeEstudo::orderByRaw("FIELD(status, 'Concluídas') ASC")->get();
         return view('planos.index', compact('planos' , 'statusOptions'));
     }
 

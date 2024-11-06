@@ -11,6 +11,8 @@ use App\Http\Controllers\TarefasController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\LembreteController;
 use App\Http\Controllers\PlanoDeEstudoController;
+use App\Http\Controllers\ImagemController;
+
 
 
 
@@ -29,6 +31,8 @@ Route::prefix('horarios')->group(function () {
 
 
 Route::prefix('tarefas')->group(function () {
+    Route::delete('/{tarefa}/imagens/{imagem}', [TarefasController::class, 'deleteImagem'])->name('tarefas.imagens.destroy');
+
     Route::get('/', [TarefasController::class, 'index'])->name('tarefas.index');
     Route::get('/create', [TarefasController::class, 'create'])->name('tarefas.create');
     Route::post('/store', [TarefasController::class, 'store'])->name('tarefas.store');
@@ -36,6 +40,7 @@ Route::prefix('tarefas')->group(function () {
     Route::get('/{id}/edit', [TarefasController::class, 'edit'])->name('tarefas.edit');
     Route::put('/{id}/update', [TarefasController::class, 'update'])->name('tarefas.update');
 });
+
 
 Route::prefix('lembretes')->group(function () {
     Route::get('/', [LembreteController::class, 'index'])->name('lembretes.index');
@@ -63,6 +68,10 @@ Route::delete('/perfil/delete', [ProfileController::class, 'delete'])->name('per
 Route::post('/horarios/{id}/update-status', [HorariosController::class, 'updateStatus'])->name('horarios.updateStatus');
 Route::post('/tarefas/{id}/update-status', [TarefasController::class, 'updateStatus'])->name('tarefas.updateStatus');
 Route::post('/planos/{id}/update-status', [PlanoDeEstudoController::class, 'updateStatus'])->name('planos.updateStatus');
+
+
+Route::get('/dashboard/tarefas-status', [DashController::class, 'getTarefasStatusByDisciplina']);
+
 
 });
 

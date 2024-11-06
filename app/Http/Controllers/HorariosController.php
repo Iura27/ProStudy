@@ -22,6 +22,7 @@ class HorariosController extends Controller
     public function index() {
         $user = auth()->user();
         $horarios = Horario::where('user_id', $user->id)->get();
+        $horarios = Horario::orderByRaw("FIELD(status, 'Concluídas') ASC")->get();
         $statusOptions = Horario::getStatusOptions();
         return view('horarios.index', ['horarios'=>$horarios, 'statusOptions' => $statusOptions]);
     }
