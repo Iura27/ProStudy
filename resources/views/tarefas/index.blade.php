@@ -12,6 +12,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 
+
 @section('content')
 <div class="col-md-12">
     <div class="card">
@@ -21,6 +22,7 @@
             <a href="{{ route('tarefas.create') }}" class="btn btn-primary">
                 Criar Nova Tarefa
             </a>
+
 
         </div>
         <div class="card-body">

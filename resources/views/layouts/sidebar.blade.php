@@ -23,7 +23,7 @@
 
             <li>
                 <a href="/planos">
-                    <i class='bx bx-time icon'></i>
+                    <i class='bx bx-task icon'></i>
                     Planos de Estudo
                 </a>
             </li>

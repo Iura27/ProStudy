@@ -71,6 +71,7 @@ Route::post('/planos/{id}/update-status', [PlanoDeEstudoController::class, 'upda
 
 
 Route::get('/dashboard/tarefas-status', [DashController::class, 'getTarefasStatusByDisciplina']);
+Route::get('/get-horarios-agrupados', [DashController::class, 'getHorariosAgrupados']);
 
 
 });

@@ -17,12 +17,32 @@ class HorariosController extends Controller
             $this->middleware('auth');
         }
 
+        public function verificarHorariosAtrasados()
+        {
+            // Obtém a data e hora atual e o horário atual mais 30 minutos
+            $now = now();
+            $nowPlus30 = now()->addMinutes(30);
+
+            // Atualiza o status dos horários que estão a menos de 30 minutos do fim para "Quase atrasada"
+            Horario::whereRaw("STR_TO_DATE(CONCAT(data, ' ', fim), '%Y-%m-%d %H:%i:%s') > ?", [$now])
+                ->whereRaw("STR_TO_DATE(CONCAT(data, ' ', fim), '%Y-%m-%d %H:%i:%s') <= ?", [$nowPlus30])
+                ->whereNotIn('status', ['Atrasada', 'Concluída', 'Quase atrasada']) // Evita reprocessar horários já atualizados
+                ->update(['status' => 'Quase atrasada']);
+
+            // Atualiza o status dos horários já atrasados para "Atrasada"
+            Horario::whereRaw("STR_TO_DATE(CONCAT(data, ' ', fim), '%Y-%m-%d %H:%i:%s') < ?", [$now])
+                ->whereNotIn('status', ['Atrasada', 'Concluída']) // Evita reprocessar horários já atrasados ou concluídos
+                ->update(['status' => 'Atrasada']);
+        }
+
 
 
     public function index() {
         $user = auth()->user();
-        $horarios = Horario::where('user_id', $user->id)->get();
-        $horarios = Horario::orderByRaw("FIELD(status, 'Concluídas') ASC")->get();
+        $this->verificarHorariosAtrasados();
+        $horarios = Horario::where('user_id', $user->id)
+            ->orderByRaw("FIELD(status, 'Concluídas') ASC")
+            ->get();
         $statusOptions = Horario::getStatusOptions();
         return view('horarios.index', ['horarios'=>$horarios, 'statusOptions' => $statusOptions]);
     }

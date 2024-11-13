@@ -9,13 +9,17 @@ use App\Models\Tarefa;
 
 class PlanoDeEstudoController extends Controller
 {
+
+
+
+
     public function index()
     {
         $statusOptions = PlanoDeEstudo::getStatusOptions();
         $planos = PlanoDeEstudo::with('horarios', 'tarefas')  // Corrigido para 'horarios' e 'tarefas'
+            ->orderByRaw("FIELD(status, 'Concluídas') ASC")
             ->where('user_id', auth()->id())
             ->get();
-        $planos = PlanoDeEstudo::orderByRaw("FIELD(status, 'Concluídas') ASC")->get();
         return view('planos.index', compact('planos' , 'statusOptions'));
     }
 

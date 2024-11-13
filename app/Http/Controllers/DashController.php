@@ -6,49 +6,62 @@ use Illuminate\Http\Request;
 use App\Models\Tarefa;
 use App\Models\Horario;
 use App\Models\PlanoDeEstudo;
+use Illuminate\Support\Facades\Auth;
 
 class DashController extends Controller
 {
-    public function index() {
-        return view('dash');
-    }
-
     public function dashboard(Request $request)
-{
-    // Dados gerais
-    $totalTarefas = Tarefa::count();
-    $totalHorarios = Horario::count();
-    $totalPlanos = PlanoDeEstudo::count();
+    {
+        // Dados gerais
+        $totalTarefas = Tarefa::where('user_id', Auth::id())->count();
+        $totalHorarios = Horario::where('user_id', Auth::id())->count();
+        $totalPlanos = PlanoDeEstudo::where('user_id', Auth::id())->count();
 
-    // Dados para o gráfico de Status das Tarefas
-    $tarefasStatus = Tarefa::select('status', \DB::raw('count(*) as total'))
+        // Obter lista de disciplinas para o filtro
+        $disciplinas = Tarefa::where('user_id', Auth::id())
+                             ->distinct()
+                             ->pluck('disciplina');
+
+        // Filtro de disciplina e status selecionados pelo usuário
+        $filtroDisciplina = $request->input('disciplina');
+        $filtroStatus = $request->input('status');
+
+        // Consulta para filtrar tarefas
+        $tarefasFiltradas = Tarefa::where('user_id', Auth::id())
+                                ->when($filtroDisciplina, function ($query) use ($filtroDisciplina) {
+                                    return $query->where('disciplina', $filtroDisciplina);
+                                })
+                                ->when($filtroStatus, function ($query) use ($filtroStatus) {
+                                    return $query->where('status', $filtroStatus);
+                                })
+                                ->get();
+
+        // Dados para o gráfico de Status das Tarefas (baseado nas tarefas filtradas)
+        $tarefasStatus = $tarefasFiltradas
                             ->groupBy('status')
-                            ->pluck('total', 'status');
+                            ->map(function ($statusGroup) {
+                                return $statusGroup->count();
+                            });
 
-    // Obter lista de disciplinas para o filtro
-    $disciplinas = Tarefa::distinct()->pluck('disciplina');
+        // Obter as opções de status para o filtro
+        $statusOptions = Horario::getStatusOptions();
 
-    // Filtro de disciplina e status selecionados pelo usuário
-    $filtroDisciplina = $request->input('disciplina');
-    $filtroStatus = $request->input('status');
 
-    // Consulta para filtrar tarefas
-    $tarefasFiltradas = Tarefa::when($filtroDisciplina, function ($query) use ($filtroDisciplina) {
-                                return $query->where('disciplina', $filtroDisciplina);
-                            })
-                            ->when($filtroStatus, function ($query) use ($filtroStatus) {
-                                return $query->where('status', $filtroStatus);
-                            })
-                            ->get();
+        // Dados para o gráfico de horários agrupados por mês
+        $horariosAgrupados = Horario::selectRaw('YEAR(data) as year, MONTH(data) as month, status, COUNT(*) as total')
+            ->where('user_id', Auth::id())
+            ->groupBy('year', 'month', 'status')
+            ->orderBy('year')
+            ->orderBy('month')
+            ->get();
 
-    // Dados para o gráfico de Tarefas por Disciplina
-    $tarefasPorDisciplina = Tarefa::select('disciplina', \DB::raw('count(*) as total'))
-                                    ->groupBy('disciplina')
-                                    ->pluck('total', 'disciplina');
+          
 
-    return view('dash', compact(
-        'tarefasStatus', 'tarefasPorDisciplina', 'totalTarefas',
-        'totalHorarios', 'totalPlanos', 'disciplinas', 'tarefasFiltradas'
-    ));
+        return view('dash', compact(
+            'tarefasStatus', 'totalTarefas', 'totalHorarios', 'totalPlanos',
+            'disciplinas', 'tarefasFiltradas', 'statusOptions', 'horariosAgrupados'
+        ));
+    }
 }
-}
+
+

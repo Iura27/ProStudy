@@ -54,7 +54,7 @@
                                     Sem Tarefa
                                 @endif
                             </td>
-                            <td>{{ $plano->nota }}</td>
+                            <td>{{ Str::limit($plano->nota, 20) }}</td>
                             <td>
                                 <form action="{{ route('horarios.updateStatus', $plano->id) }}" method="POST">
                                     @csrf

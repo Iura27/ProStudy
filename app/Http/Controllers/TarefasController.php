@@ -9,16 +9,40 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ImagemController;
 use App\Models\Imagem;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class TarefasController extends Controller
 {
+
+    public function verificarTarefasAtrasadas()
+    {
+        // Obtém a data e hora atual e o horário atual mais 30 minutos
+        $now = now();
+        $nowPlus30 = now()->addMinutes(30);
+
+        // Atualiza o status das tarefas que estão a menos de 30 minutos do prazo para "Quase atrasada"
+        Tarefa::where('data_entrega', '>', $now)
+            ->where('data_entrega', '<=', $nowPlus30)
+            ->whereNotIn('status', ['Atrasada', 'Concluída', 'Quase atrasada']) // Evita reprocessar tarefas já atrasadas, concluídas ou quase atrasadas
+            ->update(['status' => 'Quase atrasada']);
+
+        // Atualiza o status das tarefas já atrasadas para "Atrasada"
+        Tarefa::where('data_entrega', '<', $now)
+            ->whereNotIn('status', ['Atrasada', 'Concluída']) // Evita reprocessar tarefas já atrasadas ou concluídas
+            ->update(['status' => 'Atrasada']);
+    }
+
     public function index() {
+        $this->verificarTarefasAtrasadas();
+
         $user = auth()->user(); // Obtém o usuário autenticado
         $tarefas = Tarefa::where('user_id', $user->id)
             ->orderByRaw("FIELD(status, 'Concluídas') ASC")
             ->get();
         $statusOptions = Tarefa::getStatusOptions();
-        return view('tarefas.index', ['tarefas' => $tarefas, 'user' => $user, 'statusOptions' => $statusOptions]);
+        $agora = now();
+        $agora30 = now()->subMinutes(30);
+        return view('tarefas.index', ['tarefas' => $tarefas, 'user' => $user, 'statusOptions' => $statusOptions, 'agora' => $agora, 'agora30' => $agora30 ]);
     }
 
     public function create() {
@@ -106,5 +130,18 @@ class TarefasController extends Controller
 
         return redirect()->route('tarefas.index')->with('success', 'Tarefa atualizada com sucesso!');
     }
+
+    public function updateStatus(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required|in:Em andamento,Concluídas,Adiadas,Atrasada,Quase atrasada',
+    ]);
+
+    $tarefas = Tarefa::findOrFail($id);
+    $tarefas->status = $request->status;
+    $tarefas->save();
+
+    return redirect()->back()->with('success', 'Status atualizado com sucesso!');
+}
 
 }

@@ -12,6 +12,7 @@ class LembreteController extends Controller
     // Listar todos os lembretes do usuário autenticado
     public function index() {
         $user = auth()->user();
+
         $lembretes = Lembrete::where('user_id', $user->id)->get();
 
         return view('lembretes.index', ['lembretes'=>$lembretes, 'user' => $user]);

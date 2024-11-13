@@ -119,7 +119,8 @@
         flatpickr("#data_entrega", {
             enableTime: true,
             dateFormat: "Y-m-d H:i",
-            time_24hr: true
+            time_24hr: true,
+            //defaultDate: {{ \Carbon\Carbon::parse($tarefa->data_entrega)->format('Y-m-d H:i') }} // Valor inicial
         });
     });
 
