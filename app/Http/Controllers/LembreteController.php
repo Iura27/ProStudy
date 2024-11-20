@@ -10,10 +10,15 @@ use App\Http\Requests\LembreteRequest;
 class LembreteController extends Controller
 {
     // Listar todos os lembretes do usuário autenticado
-    public function index() {
+    public function index(Request $request) {
+        $search = $request->input('search');
         $user = auth()->user();
 
-        $lembretes = Lembrete::where('user_id', $user->id)->get();
+        $lembretes = Lembrete::where('user_id', $user->id)
+        ->when($search, function ($query, $search) {
+            return $query->where('texto', 'like', '%' . $search . '%');
+    })
+        ->get();
 
         return view('lembretes.index', ['lembretes'=>$lembretes, 'user' => $user]);
     }

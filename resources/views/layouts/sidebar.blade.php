@@ -1,4 +1,14 @@
 
+<style>
+    .active {
+    background-color: #a8a2a380; /* ou qualquer cor de destaque que você quiser */
+    font-weight: bold;
+    border-radius: 10px;
+    text-decoration: underline;
+    
+}
+</style>
+
 
 <!-- Sidebar -->
 @if (empty($hideSidebar))
@@ -12,23 +22,23 @@
         </div>
 
         <ul class="side-menu">
-            <li>
+            <li class="{{ Request::is('dash') ? 'active' : '' }}">
                 <a href="/dash">
-                    <i class='bx bxs-dashboard icon' ></i> Dashboard
+                    <i class='bx bxs-dashboard icon'></i> Dashboard
                 </a>
             </li>
 
             <!-- Divider-->
             <li class="divider " data-text="STARTER" >Opções</li>
 
-            <li>
+            <li class="{{ Request::is('planos') ? 'active' : '' }}">
                 <a href="/planos">
                     <i class='bx bx-task icon'></i>
                     Planos de Estudo
                 </a>
             </li>
 
-            <li>
+            <li class="{{ Request::is('horarios') ? 'active' : '' }}">
                 <a href="/horarios">
                     <i class='bx bx-time icon'></i>
                     Horários
@@ -36,19 +46,21 @@
             </li>
 
 
-            <li>
+            <li class="{{ Request::is('tarefas') ? 'active' : '' }}">
                 <a href="/tarefas">
                     <i class='bx bx-task icon'></i>
                     Tarefas
                 </a>
             </li>
 
-            <li>
+            <li class="{{ Request::is('lembretes') ? 'active' : '' }}">
                 <a href="/lembretes">
                     <i class='bx bx-calendar icon'></i>
                     Lembretes
                 </a>
             </li>
+
+            
 
 
 

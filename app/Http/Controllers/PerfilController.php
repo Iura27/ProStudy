@@ -9,42 +9,49 @@ use App\Models\User;
 
 class PerfilController extends Controller
 {
+    /**
+     * Exibe a página de perfil.
+     */
     public function index()
     {
         return view('auth.perfil', ['user' => Auth::user()]);
     }
 
+    /**
+     * Atualiza os dados do perfil do usuário.
+     */
     public function update(Request $request, $id)
     {
-        // Validação dos dados
+        // Validação dos dados enviados
         $request->validate([
             'firstName' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:800', // Limite de 800KB
         ]);
 
-        // Encontre o usuário pelo ID
+        // Obtém o usuário autenticado
         $user = User::findOrFail($id);
 
-        // Atualize os dados do usuário
+        // Atualiza os dados do usuário
         $user->name = $request->input('firstName');
         $user->email = $request->input('email');
 
-        // Verifique se uma nova foto foi enviada
+        // Verifica se uma nova foto foi enviada
         if ($request->hasFile('photo')) {
-            // Apagar a foto antiga se existir
+            // Apaga a foto antiga, se existir
             if ($user->photo) {
-                Storage::delete($user->photo);
+                Storage::disk('public')->delete($user->photo);
             }
 
-            // Salvar a nova foto e obter o caminho
-            $path = $request->file('photo')->store('photos', 'public');
-            $user->photo = $path; // Atualiza o campo photo com o novo caminho
+            // Salva a nova foto no diretório 'users' dentro de 'storage/app/public'
+            $path = $request->file('photo')->store('users', 'public');
+            $user->photo = $path; // Atualiza o campo 'photo' no banco de dados
         }
 
-        // Salve as mudanças no banco de dados
+        // Salva as alterações
         $user->save();
 
-        return redirect()->route('perfil')->with('success', 'Profile updated successfully!');
+        // Redireciona com mensagem de sucesso
+        return redirect()->route('perfil.index')->with('success', 'Perfil atualizado com sucesso!');
     }
 }

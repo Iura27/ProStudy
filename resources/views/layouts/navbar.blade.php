@@ -87,7 +87,10 @@
             </span>
         </a>
 
-            <img src="{{ asset('assets/images/avatar/avatar-1.png') }}" alt="Avatar" id="profileImage">
+        <img
+        src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : asset('assets/images/avatar/avatar-1.png') }}"
+        alt="Avatar"
+        id="profileImage">
             <div class="dropdown-menu" id="dropdownMenu">
                 <a href="/perfil">Meu Perfil</a>
                 <a href="settings.html">Settings</a>

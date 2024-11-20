@@ -23,25 +23,31 @@ class TarefasController extends Controller
         // Atualiza o status das tarefas que estão a menos de 30 minutos do prazo para "Quase atrasada"
         Tarefa::where('data_entrega', '>', $now)
             ->where('data_entrega', '<=', $nowPlus30)
-            ->whereNotIn('status', ['Atrasada', 'Concluída', 'Quase atrasada']) // Evita reprocessar tarefas já atrasadas, concluídas ou quase atrasadas
+            ->whereNotIn('status', ['Atrasada', 'Concluídas', 'Quase atrasada']) // Evita reprocessar tarefas já atrasadas, concluídas ou quase atrasadas
             ->update(['status' => 'Quase atrasada']);
 
         // Atualiza o status das tarefas já atrasadas para "Atrasada"
         Tarefa::where('data_entrega', '<', $now)
-            ->whereNotIn('status', ['Atrasada', 'Concluída']) // Evita reprocessar tarefas já atrasadas ou concluídas
+            ->whereNotIn('status', ['Atrasada', 'Concluídas']) // Evita reprocessar tarefas já atrasadas ou concluídas
             ->update(['status' => 'Atrasada']);
     }
 
-    public function index() {
+    public function index(Request $request) {
         $this->verificarTarefasAtrasadas();
 
+        $search = $request->input('search');
         $user = auth()->user(); // Obtém o usuário autenticado
         $tarefas = Tarefa::where('user_id', $user->id)
+            ->when($search, function ($query, $search) {
+                return $query->where('descricao', 'like', '%' . $search . '%');
+        })
             ->orderByRaw("FIELD(status, 'Concluídas') ASC")
-            ->get();
+            ->paginate(5);
+
         $statusOptions = Tarefa::getStatusOptions();
         $agora = now();
         $agora30 = now()->subMinutes(30);
+
         return view('tarefas.index', ['tarefas' => $tarefas, 'user' => $user, 'statusOptions' => $statusOptions, 'agora' => $agora, 'agora30' => $agora30 ]);
     }
 

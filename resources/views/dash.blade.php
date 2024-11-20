@@ -157,6 +157,8 @@
         const myChart = echarts.init(chartDom);
 
 
+
+
         // Dados de meses
         const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 
@@ -193,12 +195,18 @@
 
         // Configurações do gráfico
         const option = {
+        title: {
+            text: 'Horários por status e meses ',
+            left: 'center',
+        },
+
             tooltip: {
                 trigger: 'axis',
                 axisPointer: { type: 'shadow' }
             },
             legend: {
-                data: Object.keys(statusMap)  // Cria legendas para cada status único
+                data: Object.keys(statusMap) , // Cria legendas para cada status único
+                top: '25 px'
             },
             grid: {
                 left: '3%',
@@ -215,5 +223,89 @@
         myChart.setOption(option);
     });
 </script>
+
+
+<!-- Div para exibir o gráfico de evolução dos planos -->
+<div id="evolucaoPlanosChart" style="width: 100%; height: 400px; margin-top: 50px; margin-top:150px;"></div>
+
+<script>
+    // Dados para o gráfico
+    var planosAgrupados = @json($planosAgrupados);
+
+    // Configuração do gráfico de linhas horizontal
+    var option = {
+        title: {
+            text: 'Evolução dos Planos de Estudo Em andamento e Concluídas ',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'line' // Destacar a linha ao passar o mouse
+            }
+        },
+        legend: {
+            data: ['Em andamento', 'Concluídas '],
+            top: '10%'
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            data: Object.keys(planosAgrupados),
+            name: 'Mês',
+            axisLabel: {
+                rotate: 45, // Rotacionar os labels para facilitar a leitura
+            }
+        },
+        yAxis: {
+            type: 'value',
+            name: 'Número de Planos'
+        },
+        series: [
+            {
+                name: 'Em andamento',
+                type: 'line',
+                smooth: true, // Linha suave para mostrar crescimento/descrecimento
+                data: Object.values(planosAgrupados).map(d => d['Em andamento'] || 0),
+                lineStyle: {
+                    color: '#5470C6'
+                },
+                areaStyle: {
+                    opacity: 0.2,
+                    color: '#5470C6' // Adiciona uma área sombreada
+                },
+                symbol: 'circle', // Marca o ponto de cada valor
+                symbolSize: 8
+            },
+            {
+                name: 'Concluídas ',
+                type: 'line',
+                smooth: true,
+                data: Object.values(planosAgrupados).map(d => d['Concluídas'] || 0),
+                lineStyle: {
+                    color: '#91CC75'
+                },
+                areaStyle: {
+                    opacity: 0.2,
+                    color: '#91CC75'
+                },
+                symbol: 'circle',
+                symbolSize: 8
+            }
+        ]
+    };
+
+    // Inicializar e renderizar o gráfico
+    var chartDom = document.getElementById('evolucaoPlanosChart');
+    var myChart = echarts.init(chartDom);
+    myChart.setOption(option);
+</script>
+
+
 
 @endsection

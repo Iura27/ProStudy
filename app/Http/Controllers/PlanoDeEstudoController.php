@@ -13,13 +13,18 @@ class PlanoDeEstudoController extends Controller
 
 
 
-    public function index()
+    public function index(Request $request)
     {
-        $statusOptions = PlanoDeEstudo::getStatusOptions();
+        $search = $request->input('search');
         $planos = PlanoDeEstudo::with('horarios', 'tarefas')  // Corrigido para 'horarios' e 'tarefas'
             ->orderByRaw("FIELD(status, 'Concluídas') ASC")
             ->where('user_id', auth()->id())
-            ->get();
+            ->when($search, function ($query, $search) {
+                return $query->where('nota', 'like', '%' . $search . '%');
+        })
+            ->paginate(5);
+
+            $statusOptions = PlanoDeEstudo::getStatusOptions();
         return view('planos.index', compact('planos' , 'statusOptions'));
     }
 

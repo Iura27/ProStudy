@@ -61,7 +61,7 @@ Route::prefix('planos')->group(function () {
 });
 
 
-Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil');
+Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
 Route::put('/perfil/{id}', [PerfilController::class, 'update'])->name('perfil.update');
 Route::delete('/perfil/delete', [ProfileController::class, 'delete'])->name('perfil.delete');
 

@@ -37,12 +37,16 @@ class HorariosController extends Controller
 
 
 
-    public function index() {
+    public function index(Request $request) {
+        $search = $request->input('search');
         $user = auth()->user();
         $this->verificarHorariosAtrasados();
         $horarios = Horario::where('user_id', $user->id)
             ->orderByRaw("FIELD(status, 'Concluídas') ASC")
-            ->get();
+            ->when($search, function ($query, $search) {
+                return $query->where('disciplina', 'like', '%' . $search . '%');
+        })
+            ->paginate(5);
         $statusOptions = Horario::getStatusOptions();
         return view('horarios.index', ['horarios'=>$horarios, 'statusOptions' => $statusOptions]);
     }

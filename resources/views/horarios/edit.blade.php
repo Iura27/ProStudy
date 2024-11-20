@@ -13,8 +13,7 @@
     <form class="form-create" action="{{ route('horarios.update', $horario->id) }}" method="POST">
         @csrf
         @method('PUT')
-
-        <h1>Editar Horário {{ $horario->inicio }}</h1>
+        <h1>Editar Horário</h1>
 
         <!-- Campo Disciplina -->
         <div>
@@ -29,36 +28,41 @@
             </select>
         </div>
 
-        <!-- Campo Data -->
-        <div>
-            <label class="label-form">Data:</label><br>
-            <input type="date" class="form-input" id="data" name="data" value="{{ $horario->data }}" required />
-        </div>
+        <!-- Campos Data, Início e Fim em uma linha -->
+        <div class="form-group row">
+            <div class="col-md-4">
+                <label class="label-form">Data:</label><br>
+                <input type="date" class="form-input" id="data" name="data" value="{{ $horario->data }}" required />
+            </div>
 
-        <!-- Campo Início -->
-        <div>
-            <label class="label-form">Início:</label><br>
-            <input type="time" class="form-input" id="inicio" name="inicio" value="{{ $horario->inicio }}" required />
-        </div>
+            <div class="col-md-4">
+                <label class="label-form">Início:</label><br>
+                <input type="time" class="form-input" id="inicio" name="inicio" value="{{ $horario->inicio }}" required />
+            </div>
 
-        <!-- Campo Fim -->
-        <div>
-            <label class="label-form">Fim:</label><br>
-            <input type="time" class="form-input" id="fim" name="fim" value="{{ $horario->fim }}" required />
+            <div class="col-md-4">
+                <label class="label-form">Fim:</label><br>
+                <input type="time" class="form-input" id="fim" name="fim" value="{{ $horario->fim }}" required />
+            </div>
         </div>
 
         <!-- Campo Status -->
         <div>
             <label class="label-form">Status:</label><br>
-            <select class="form-input" id="status" name="status" v-model="form.status" required>
-                @foreach($statusOptions as $stat)
-                    <option value="{{ $stat }}" {{ $horario->statusOptions === $stat ? 'selected' : '' }}>
-                        {{ $stat }}
+            <select class="form-input" id="status" name="status" required>
+                @foreach($statusOptions as $status)
+                    <option value="{{ $status }}" {{ $horario->status === $status ? 'selected' : '' }}>
+                        {{ $status }}
                     </option>
                 @endforeach
             </select>
         </div>
 
+        <!-- Campo Observação -->
+        <div>
+            <label class="label-form">Observação:</label><br>
+            <textarea class="form-input" id="observacao" name="observacao">{{ $horario->observacao }}</textarea>
+        </div>
 
         <!-- Botões -->
         <div class="botoes">
@@ -67,5 +71,4 @@
         </div>
     </form>
 </div>
-
 @endsection

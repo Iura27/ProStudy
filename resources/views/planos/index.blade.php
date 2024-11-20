@@ -11,8 +11,24 @@
 
 <div class="col-md-12">
     <div class="card">
+        <h4 style="font-weight: 900; font-size: 24px; color: #555 !important; margin-bottom: 10px;">Planos de Estudo</h4>
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h4>Planos de Estudo</h4>
+
+
+            <!-- Barra de Pesquisa -->
+<div class="search-bar" >
+    <form action="{{ route('planos.index') }}" method="GET" style="display: flex; ">
+        <input
+            style ="width: 400px"
+            type="text"
+            name="search"
+            class="form-input"
+            placeholder="Pesquisar plano..."
+            value="{{ request('search') }}"
+        />
+        <button type="submit" class="btn-primary" style="width: 110px; padding-top: 4px; padding-bottom: 4px; height: 45px; margin-top:8px;">Pesquisar</button>
+    </form>
+</div>
             <!-- Botão de Criar Novo Plano de Estudo -->
             <a href="{{ route('planos.create') }}" class="btn btn-primary">
                 Criar Plano de Estudo
@@ -56,7 +72,7 @@
                             </td>
                             <td>{{ Str::limit($plano->nota, 20) }}</td>
                             <td>
-                                <form action="{{ route('horarios.updateStatus', $plano->id) }}" method="POST">
+                                <form action="{{ route('planos.updateStatus', $plano->id) }}" method="POST">
                                     @csrf
                                     <select name="status" onchange="this.form.submit()" class="form-select">
                                         @foreach($statusOptions as $stat)
@@ -96,6 +112,10 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Componente de Paginação -->
+         <div class="d-flex justify-end mt-3">
+            {{ $planos->links() }}
+        </div>
         </div>
     </div>
 </div>

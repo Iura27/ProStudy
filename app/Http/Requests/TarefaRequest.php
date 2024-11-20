@@ -27,7 +27,7 @@ class TarefaRequest extends FormRequest
         'tipo' => 'required',
         'disciplina' => 'required',
         'status' => 'required',
-        'data_entrega' => 'dateTime'
+        'data_entrega' => 'date'
             //
         ];
     }
